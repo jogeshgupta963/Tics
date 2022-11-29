@@ -4,7 +4,8 @@ import type {
   Request,
   Response,
 } from "express";
-import { CustomError } from "../utils/customErr";
+import { CustomError } from "../utils/errors/customErr";
+
 const errorHandler = (
   err: any,
   req: Request,
@@ -18,7 +19,7 @@ const errorHandler = (
   res.status(400).json({
     errors: [
       {
-        message: "Something went wrong",
+        message: err.message,
       },
     ],
   });
