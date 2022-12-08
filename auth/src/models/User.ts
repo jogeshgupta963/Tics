@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 import { Password } from "../utils/password";
 //userInfo
 interface user {

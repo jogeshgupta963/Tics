@@ -3,7 +3,7 @@ import "express-async-errors";
 import cookieSession from "cookie-session";
 import { connectDb } from "./database/db";
 import { errorHandler,Page404 } from "@jogeshgupta-microservices/common";
-import { authRouter } from "./routes/auth";
+
 import methodOverride from "method-override";
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(
   })
 );
 
-app.use("/api/users", authRouter);
+
 app.all("*", () => {
   throw new Page404();
 });

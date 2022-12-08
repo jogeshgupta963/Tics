@@ -1,8 +1,7 @@
 import express from "express";
 import { signupValidation, signinValidation } from "../utils/auth";
 import { signup, signin, currentUser, signout } from "../controllers/auth";
-import { validateRequest } from "../middlewares/validateRequest";
-import { authenticated, currentUserMiddleware } from "../middlewares/auth";
+import { authenticated, currentUserMiddleware,validateRequest } from "@jogeshgupta-microservices/common";
 const router = express.Router();
 
 router.route("/signup").post(signupValidation, validateRequest, signup);

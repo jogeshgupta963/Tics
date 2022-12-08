@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
-import { BadRequestError } from "../utils/errors/bad-request-err";
+import { BadRequestError } from "@jogeshgupta-microservices/common";
 import { Password } from "../utils/password";
 
 async function signup(req: Request, res: Response) {
