@@ -1,12 +1,14 @@
-interface Color {
-    red:number;
-    blue:number;
-    green:number;
-}
+//errors
+export  * from "./utils/errors/bad-request-err";
+export  * from "./utils/errors/customErr";
+export  * from "./utils/errors/database-error";
+export  * from "./utils/errors/not-authorized-error";
+export  * from "./utils/errors/page404";
+export  * from "./utils/errors/request-validation-error";
+export  * from "./utils/errors/bad-request-err";
 
-const color:Color = {
-    red:10,
-    blue:10,
-    green:10
-}
-console.log(color)
+//middlewares
+
+export * from './middlewares/auth'
+export * from './middlewares/error-handler'
+export * from './middlewares/validateRequest'
