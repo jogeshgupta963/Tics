@@ -1,16 +1,16 @@
 {
   "name": "@jogeshgupta-microservices/common",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./build/index.js",
-  "types":"./build/index.d.ts",
-  "files":[
+  "types": "./build/index.d.ts",
+  "files": [
     "build/**/*"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -r ./build",
-    "build":"npm run clean && tsc"
+    "build": "npm run clean && tsc"
   },
   "keywords": [],
   "author": "",
