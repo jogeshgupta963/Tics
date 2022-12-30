@@ -28,8 +28,7 @@ async function signup(req: Request, res: Response) {
   req.session = {
     jwt: userJwt,
   };
-  console.log(user);
-  
+
   res.status(201).json(user);
 }
 async function signin(req: Request, res: Response) {

@@ -1,46 +1,66 @@
 import { NotAuthorisedError, Page404 } from "@jogeshgupta-microservices/common";
 import { Request, Response, Router } from "express";
 import Ticket from "../models/Ticket";
+import { TicketCreatedPublisher } from "../nats/events/publishers/ticket-created";
+import { natsWrapper } from "../nats/connection/natsWrapper";
+import { TicketUpdatedPublisher } from "../nats/events/publishers/ticket-updated";
 
-async function createTicket(req:Request,res:Response){
-    const {title,price} = req.body
+async function createTicket(req: Request, res: Response) {
+  const { title, price } = req.body;
 
-    const ticket = Ticket.buildTicket({
-        title,
-        price,
-        userId:req.user!.id 
-    })
-    await ticket.save()
+  const ticket = Ticket.buildTicket({
+    title,
+    price,
+    userId: req.user!.id,
+  });
+  await ticket.save();
 
-    res.status(201).json(ticket)
+  const ticketCreated = new TicketCreatedPublisher(natsWrapper.client);
+  await ticketCreated.publish({
+    id: ticket.id,
+    title: ticket.title,
+    price: ticket.price,
+    userId: ticket.userId,
+  });
+
+  res.status(201).json(ticket);
 }
 
-async function getTicketById(req:Request,res:Response){
-    const ticket = await Ticket.findById(req.params.id)
-    if(!ticket){
-        throw new Page404();
-    }
-    res.json(ticket)
+async function getTicketById(req: Request, res: Response) {
+  const ticket = await Ticket.findById(req.params.id);
+  if (!ticket) {
+    throw new Page404();
+  }
+  res.json(ticket);
 }
 
-async function getTickets(req:Request,res:Response){
-    const tickets = await Ticket.find({})
+async function getTickets(req: Request, res: Response) {
+  const tickets = await Ticket.find({});
 
-    res.json(tickets||[])
+  res.json(tickets || []);
 }
-async function updateTicket(req:Request,res:Response){
-    const ticket = await Ticket.findById(req.params.id)
-    if(!ticket){
-        throw new Page404()
-    }
-    if(ticket.userId !== req.user!.id){
-        throw new NotAuthorisedError();
-    }
-    ticket.set({
-        title:req.body.title,
-        price:req.body.price
-    })
-    await ticket.save()
-    res.json(ticket)
+async function updateTicket(req: Request, res: Response) {
+  const ticket = await Ticket.findById(req.params.id);
+  if (!ticket) {
+    throw new Page404();
+  }
+  if (ticket.userId !== req.user!.id) {
+    throw new NotAuthorisedError();
+  }
+  ticket.set({
+    title: req.body.title,
+    price: req.body.price,
+  });
+  await ticket.save();
+
+  const ticketUpdated = new TicketUpdatedPublisher(natsWrapper.client);
+  ticketUpdated.publish({
+    id: ticket.id,
+    title: ticket.title,
+    price: ticket.price,
+    userId: ticket.userId,
+  });
+
+  res.json(ticket);
 }
-export {createTicket,getTicketById,getTickets,updateTicket}
+export { createTicket, getTicketById, getTickets, updateTicket };
