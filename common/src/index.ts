@@ -26,3 +26,6 @@ export * from "./events/subjects";
 
 export * from "./events/tickets/ticket-created-event";
 export * from "./events/tickets/ticket-updated-event";
+
+// orders
+export * from "./utils/types/order-status";

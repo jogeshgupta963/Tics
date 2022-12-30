@@ -10,8 +10,8 @@ import {
 } from "@jogeshgupta-microservices/common";
 
 import methodOverride from "method-override";
-import { ticketRouter } from "./routes/tickets";
 import { natsWrapper } from "./nats/connection/natsWrapper";
+import { OrderRouter } from "./routes/order";
 const app = express();
 
 app.set("trust proxy", true);
@@ -25,7 +25,7 @@ app.use(
   })
 );
 app.use(currentUserMiddleware);
-app.use("/api/tickets", ticketRouter);
+app.use("/api/orders", OrderRouter);
 app.all("*", () => {
   throw new Page404();
 });
@@ -46,14 +46,20 @@ app.all("*", () => {
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error("nats client id must be defined");
   }
-
+  console.log(process.env.NATS_URL);
   try {
     // await connectDb("mongodb://tickets-mongo-srv:27017/tickets");
+    // await natsWrapper.connect(
+    //   process.env.NATS_CLUSTER_ID,
+    //   process.env.NATS_CLIENT_ID,
+    //   process.env.NATS_URL
+    // );
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URL
     );
+
     natsWrapper.client.on("close", () => {
       console.log("Nats connection closed!!");
       process.exit();

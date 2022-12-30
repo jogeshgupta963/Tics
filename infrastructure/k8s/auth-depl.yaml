@@ -18,7 +18,7 @@ spec:
           imagePullPolicy: Never
           env:
             - name: MONGO_URI
-              value: 'mongodb://tickets-mongo-srv:27017/tickets'
+              value: 'mongodb://auth-mongo-srv:27017/auth'
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
