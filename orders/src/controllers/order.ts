@@ -29,11 +29,11 @@ async function createOrder(req: Request, res: Response) {
   const existingOrder = await Order.findOne({
     ticket: ticket,
     status: {
-      $in: [
-        OrderStatus.Pending,
-        OrderStatus.AwaitingPayment,
-        OrderStatus.Complete,
-      ],
+      // $in: [
+      //   OrderStatus.Pending,
+      //   OrderStatus.AwaitingPayment,
+      //   OrderStatus.Complete,
+      // ],
     },
   });
   if (existingOrder) {
