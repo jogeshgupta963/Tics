@@ -1,5 +1,3 @@
-import { OrderStatus } from "../../utils/types/order-status";
-import { Publisher } from "../publishers/base-publisher";
 import { Subject } from "../subjects";
 
 export interface OrderCreatedEvent {
@@ -7,7 +5,8 @@ export interface OrderCreatedEvent {
   data: {
     orderId: string;
     userId: string;
-    orderStatus: OrderStatus;
+    orderStatus: string;
+    expiresAt: string;
     ticket: {
       id: string;
       price: number;
