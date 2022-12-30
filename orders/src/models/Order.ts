@@ -1,3 +1,4 @@
+import { OrderStatus } from "@jogeshgupta-microservices/common";
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema(
@@ -9,6 +10,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: OrderStatus,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,

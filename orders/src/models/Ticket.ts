@@ -1,21 +1,23 @@
 import mongoose from "mongoose";
+import Order from "./Order";
+import { OrderStatus } from "@jogeshgupta-microservices/common";
+
+// interface TicketDoc extends mongoose.Document {
+//   title: string;
+//   price: string;
+//   isReserved(): Promise<Boolean>;
+// }
 
 const TicketSchema = new mongoose.Schema(
   {
-    userId: {
+    title: {
       type: String,
       required: true,
     },
-    status: {
+    price: {
       type: String,
       required: true,
-    },
-    expiresAt: {
-      type: mongoose.Schema.Types.Date,
-    },
-    ticket: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Ticket",
+      min: 0,
     },
   },
   {
@@ -27,6 +29,20 @@ const TicketSchema = new mongoose.Schema(
     },
   }
 );
+// TicketSchema.methods.isReserved = async function (): Promise<Boolean> {
+//   const orderExists = await Order.findOne({
+//     ticket: this,
+//     status: {
+//       $in: [
+//         OrderStatus.Pending,
+//         OrderStatus.AwaitingPayment,
+//         OrderStatus.Complete,
+//       ],
+//     },
+//   });
+//   return !!orderExists;
+// };
 
 const Ticket = mongoose.model("Tickets", TicketSchema);
+
 export default Ticket;
