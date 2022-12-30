@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
-import Order from "./Order";
-import { OrderStatus } from "@jogeshgupta-microservices/common";
-
-// interface TicketDoc extends mongoose.Document {
-//   title: string;
-//   price: string;
-//   isReserved(): Promise<Boolean>;
-// }
+// import { OrderStatus } from "";
 
 const TicketSchema = new mongoose.Schema(
   {

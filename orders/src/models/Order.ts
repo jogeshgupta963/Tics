@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: OrderStatus,
+      enum: Object.keys(OrderStatus),
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
@@ -31,4 +31,4 @@ const OrderSchema = new mongoose.Schema(
 );
 
 const Order = mongoose.model("Orders", OrderSchema);
-export default Order;
+export { Order, OrderStatus };

@@ -3,10 +3,9 @@ import Ticket from "../models/Ticket";
 import {
   BadRequestError,
   NotAuthorisedError,
-  OrderStatus,
   Page404,
 } from "@jogeshgupta-microservices/common";
-import Order from "../models/Order";
+import { Order, OrderStatus } from "../models/Order";
 
 async function getAllOrders(req: Request, res: Response) {
   const orders = await Order.find({ userId: req.user!.id }).populate("ticket");
