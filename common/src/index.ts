@@ -28,13 +28,9 @@ export * from "./events/tickets/ticket-created-event";
 export * from "./events/tickets/ticket-updated-event";
 
 // orders
-export enum OrderStatus {
-  Pending = "pending",
-  Cancelled = "cancelled",
-  Complete = "complete",
-  AwaitingPayment = "awaiting:payment",
-}
 
-// export * from "./utils/types/order-status";
+export * from "./utils/types/order-status";
 export * from "./events/orders/order-cancelled-event";
-export * from "./events/orders/order-created-event";
+import { OrderCreatedEvent } from "./events/orders/order-created-event";
+// export * from "./events/orders/order-created-event";
+export { OrderCreatedEvent };
