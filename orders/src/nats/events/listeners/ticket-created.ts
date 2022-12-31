@@ -12,7 +12,7 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
 
   async onMessage(eventData: TicketCreatedEvent["data"], msg: Message) {
     const { id, title, price } = eventData;
-
+    console.log("Event Recieved");
     const ticket = new Ticket({
       _id: id,
       title,

@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-
-export enum OrderStatus {
-  Pending = "pending",
-  Cancelled = "cancelled",
-  Complete = "complete",
-  AwaitingPayment = "awaiting:payment",
-}
+import { OrderStatus } from "@jogeshgupta-microservices/common";
+// export enum OrderStatus {
+//   Pending = "pending",
+//   Cancelled = "cancelled",
+//   Complete = "complete",
+//   AwaitingPayment = "awaiting:payment",
+// }
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -37,4 +37,4 @@ const OrderSchema = new mongoose.Schema(
 );
 
 const Order = mongoose.model("Orders", OrderSchema);
-export { Order };
+export { Order, OrderStatus };
