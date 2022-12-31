@@ -1,5 +1,11 @@
-import { OrderStatus } from "@jogeshgupta-microservices/common";
 import mongoose from "mongoose";
+
+export enum OrderStatus {
+  Pending = "pending",
+  Cancelled = "cancelled",
+  Complete = "complete",
+  AwaitingPayment = "awaiting:payment",
+}
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -10,7 +16,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: Object.keys(OrderStatus),
+      enum: OrderStatus,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
@@ -31,4 +37,4 @@ const OrderSchema = new mongoose.Schema(
 );
 
 const Order = mongoose.model("Orders", OrderSchema);
-export { Order, OrderStatus };
+export { Order };

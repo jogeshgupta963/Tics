@@ -6,6 +6,9 @@ import {
   Page404,
 } from "@jogeshgupta-microservices/common";
 import { Order, OrderStatus } from "../models/Order";
+import { OrderCreatedPublisher } from "../nats/events/publishers/order-created";
+import { natsWrapper } from "../nats/connection/natsWrapper";
+import { OrderCancelledPublisher } from "../nats/events/publishers/order-cancelled";
 
 async function getAllOrders(req: Request, res: Response) {
   const orders = await Order.find({ userId: req.user!.id }).populate("ticket");
@@ -28,11 +31,11 @@ async function createOrder(req: Request, res: Response) {
   const existingOrder = await Order.findOne({
     ticket: ticket,
     status: {
-      // $in: [
-      //   OrderStatus.Pending,
-      //   OrderStatus.AwaitingPayment,
-      //   OrderStatus.Complete,
-      // ],
+      $in: [
+        OrderStatus.Pending,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete,
+      ],
     },
   });
   if (existingOrder) {
@@ -52,6 +55,21 @@ async function createOrder(req: Request, res: Response) {
     ticket,
   });
   await order.save();
+  //publish event
+
+  const orderCreatedEvent = new OrderCreatedPublisher(natsWrapper.client);
+
+  orderCreatedEvent.publish({
+    orderId: order.id,
+    userId: order.userId,
+    orderStatus: order?.status,
+    expiresAt: order.expiresAt!.toISOString(),
+    ticket: {
+      id: ticket.id,
+      price: ticket.price,
+    },
+  });
+
   return res.status(200).json(order);
 }
 
@@ -78,13 +96,22 @@ async function cancelOrder(req: Request, res: Response) {
   const order = await Order.findOne({
     _id: id,
     userId: req.user!.id,
-  });
+  }).populate("ticket");
 
   if (!order) {
     throw new BadRequestError("Order not found");
   }
   order.status = OrderStatus.Cancelled;
   await order.save();
+
+  const orderCancelEvent = new OrderCancelledPublisher(natsWrapper.client);
+
+  orderCancelEvent.publish({
+    orderId: order.id,
+    ticket: {
+      id: order.ticket!.id.toString(),
+    },
+  });
 
   return res.status(200).json(order);
 }

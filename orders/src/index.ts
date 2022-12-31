@@ -12,6 +12,8 @@ import {
 import methodOverride from "method-override";
 import { natsWrapper } from "./nats/connection/natsWrapper";
 import { OrderRouter } from "./routes/order";
+import { TicketCreatedListener } from "./nats/events/listeners/ticket-created";
+import { TicketUpdatedListener } from "./nats/events/listeners/ticket-updated";
 const app = express();
 
 app.set("trust proxy", true);
@@ -48,12 +50,6 @@ app.all("*", () => {
   }
   console.log(process.env.NATS_URL);
   try {
-    // await connectDb("mongodb://tickets-mongo-srv:27017/tickets");
-    // await natsWrapper.connect(
-    //   process.env.NATS_CLUSTER_ID,
-    //   process.env.NATS_CLIENT_ID,
-    //   process.env.NATS_URL
-    // );
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
       process.env.NATS_CLIENT_ID,
@@ -67,6 +63,13 @@ app.all("*", () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
+    const ticketCreated = new TicketCreatedListener(
+      natsWrapper.client
+    ).listen();
+    const ticketUpdated = new TicketUpdatedListener(
+      natsWrapper.client
+    ).listen();
+
     await connectDb(process.env.MONGO_URI);
     console.log("DB connected");
   } catch (err) {
@@ -78,4 +81,3 @@ app.all("*", () => {
 })();
 
 app.use(errorHandler);
-// app.use(((err, req, res, next) => {}) as ErrorRequestHandler); // ok
