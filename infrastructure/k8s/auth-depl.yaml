@@ -38,12 +38,12 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-type: Opaque
-data:
-  JWT_SECRET: enhjdmJubQ==
-# zxcvbnm
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: jwt-secret
+# type: Opaque
+# data:
+#   JWT_SECRET: enhjdmJubQ==
+# # zxcvbnm

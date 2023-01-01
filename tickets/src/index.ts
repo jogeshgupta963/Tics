@@ -12,6 +12,8 @@ import {
 import methodOverride from "method-override";
 import { ticketRouter } from "./routes/tickets";
 import { natsWrapper } from "./nats/connection/natsWrapper";
+import { OrderCreatedListener } from "./nats/events/listeners/orders/order-created";
+import { OrderCancelledListener } from "./nats/events/listeners/orders/order-cancelled";
 const app = express();
 
 app.set("trust proxy", true);
@@ -54,6 +56,9 @@ app.all("*", () => {
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URL
     );
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
     natsWrapper.client.on("close", () => {
       console.log("Nats connection closed!!");
       process.exit();

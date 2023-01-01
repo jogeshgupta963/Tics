@@ -1,4 +1,8 @@
-import { NotAuthorisedError, Page404 } from "@jogeshgupta-microservices/common";
+import {
+  BadRequestError,
+  NotAuthorisedError,
+  Page404,
+} from "@jogeshgupta-microservices/common";
 import { Request, Response, Router } from "express";
 import Ticket from "../models/Ticket";
 import { TicketCreatedPublisher } from "../nats/events/publishers/ticket-created";
@@ -47,6 +51,9 @@ async function updateTicket(req: Request, res: Response) {
   }
   if (ticket.userId !== req.user!.id) {
     throw new NotAuthorisedError();
+  }
+  if (ticket.orderId) {
+    throw new BadRequestError("Ticket is reserved");
   }
   ticket.set({
     title: req.body.title,
