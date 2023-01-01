@@ -11,7 +11,6 @@ import {
 
 import methodOverride from "method-override";
 import { natsWrapper } from "./nats/connection/natsWrapper";
-import { OrderRouter } from "./routes/order";
 import { TicketCreatedListener } from "./nats/events/listeners/ticket/ticket-created";
 import { TicketUpdatedListener } from "./nats/events/listeners/ticket/ticket-updated";
 import { ExpirationCompleteListener } from "./nats/events/listeners/expiration/expiration-complete";
@@ -28,7 +27,6 @@ app.use(
   })
 );
 app.use(currentUserMiddleware);
-app.use("/api/orders", OrderRouter);
 app.all("*", () => {
   throw new Page404();
 });
@@ -62,18 +60,6 @@ app.all("*", () => {
     });
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
-
-    const ticketCreated = new TicketCreatedListener(
-      natsWrapper.client
-    ).listen();
-
-    const ticketUpdated = new TicketUpdatedListener(
-      natsWrapper.client
-    ).listen();
-
-    const expirationComplete = new ExpirationCompleteListener(
-      natsWrapper.client
-    ).listen();
 
     await connectDb(process.env.MONGO_URI);
     console.log("DB connected");

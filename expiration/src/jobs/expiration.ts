@@ -1,10 +1,12 @@
 import { Job } from "bull";
+import { ExpirationCompletePublisher } from "../nats/events/publishers/expiration-complete";
+import { natsWrapper } from "../nats/connection/natsWrapper";
 
 async function expireOrder(job: Job) {
-  console.log(
-    "I want to publish an expiration:complete event for order id : ",
-    job.data.orderId
-  );
+  const expired = new ExpirationCompletePublisher(natsWrapper.client);
+  expired.publish({
+    orderId: job.data.orderId,
+  });
 }
 
 export { expireOrder };
