@@ -7,7 +7,6 @@ import { queueGroupName } from "../queue-group-name";
 import { Message } from "node-nats-streaming";
 import Ticket from "../../../../models/Ticket";
 import { TicketUpdatedPublisher } from "../../publishers/ticket-updated";
-import { natsWrapper } from "../../../connection/natsWrapper";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   readonly subject = Subject.OrderCreated;
@@ -29,7 +28,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     ticket.set({ orderId: orderId });
     await ticket.save();
 
-    const ticketUpdated = new TicketUpdatedPublisher(this._client);
+    const ticketUpdated = new TicketUpdatedPublisher(this.client);
     await ticketUpdated.publish({
       id: ticket.id,
       title: ticket.title,

@@ -10,7 +10,7 @@ export abstract class Listener<T extends Event> {
   abstract subject: T["subject"];
   abstract queueGroupName: string;
   abstract onMessage(data: T["data"], msg: Message): void;
-  private client: Stan;
+  protected client: Stan;
   protected ackWait = 5 * 1000;
 
   constructor(client: Stan) {
@@ -39,13 +39,6 @@ export abstract class Listener<T extends Event> {
       const parsedData = this.parseMessage(msg);
       this.onMessage(parsedData, msg);
     });
-  }
-
-  get _client() {
-    // if (!this._client) {
-    //   throw new Error("Cannot access Nats client before connecting");
-    // }
-    return this.client;
   }
 
   parseMessage(msg: Message) {
