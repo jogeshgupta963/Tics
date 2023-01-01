@@ -1,3 +1,4 @@
+import { PaymentCreatedListener } from "./nats/events/listeners/payment/payment-created";
 import { randomBytes } from "crypto";
 import express from "express";
 import "express-async-errors";
@@ -75,6 +76,9 @@ app.all("*", () => {
       natsWrapper.client
     ).listen();
 
+    const paymentCreated = new PaymentCreatedListener(
+      natsWrapper.client
+    ).listen();
     await connectDb(process.env.MONGO_URI);
     console.log("DB connected");
   } catch (err) {

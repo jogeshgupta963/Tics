@@ -6,6 +6,8 @@ import {
   OrderStatus,
 } from "@jogeshgupta-microservices/common";
 import { Payment } from "../models/Payment";
+import { PaymentCreatedPublisher } from "../nats/events/publishers/payment-created";
+import { natsWrapper } from "../nats/connection/natsWrapper";
 
 async function payments(req: Request, res: Response) {
   const { token, orderId } = req.body;
@@ -36,7 +38,16 @@ async function payments(req: Request, res: Response) {
     stripeId: charge.id,
   });
   await payment.save();
-  res.send({ sucess: true });
+
+  //publish
+
+  const paymentPublisher = new PaymentCreatedPublisher(natsWrapper.client);
+  await paymentPublisher.publish({
+    paymentId: payment.id,
+    orderId: payment.orderId,
+    stripeId: payment.stripeId,
+  });
+  res.json({ sucess: true });
 }
 
 export { payments };
