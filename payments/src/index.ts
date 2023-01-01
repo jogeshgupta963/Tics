@@ -11,9 +11,10 @@ import {
 
 import methodOverride from "method-override";
 import { natsWrapper } from "./nats/connection/natsWrapper";
-import { TicketCreatedListener } from "./nats/events/listeners/ticket/ticket-created";
-import { TicketUpdatedListener } from "./nats/events/listeners/ticket/ticket-updated";
-import { ExpirationCompleteListener } from "./nats/events/listeners/expiration/expiration-complete";
+import { OrderCreatedListener } from "./nats/events/listeners/orders/order-created";
+import { OrderCancelledListener } from "./nats/events/listeners/orders/order-cancelled";
+import { payment } from "./routes/payment";
+
 const app = express();
 
 app.set("trust proxy", true);
@@ -27,6 +28,7 @@ app.use(
   })
 );
 app.use(currentUserMiddleware);
+app.use("/api/payments/", payment);
 app.all("*", () => {
   throw new Page404();
 });
@@ -60,6 +62,15 @@ app.all("*", () => {
     });
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
+
+    const orderCreatedListener = new OrderCreatedListener(natsWrapper.client);
+    orderCreatedListener.listen();
+
+    const orderCancelledListener = new OrderCancelledListener(
+      natsWrapper.client
+    );
+
+    orderCancelledListener.listen();
 
     await connectDb(process.env.MONGO_URI);
     console.log("DB connected");

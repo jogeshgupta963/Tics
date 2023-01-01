@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: stripe-secret
+type: Opaque
+data:
+  STRIPE_PUBLISH_KEY: cGtfdGVzdF81MUt2Wk9CU0hWeHhHcEZLbUVTY2ZXWlAwVUdOa2xmblNkMWFHbXNpbmNEVHVCY3FGVUhhaHNDaUdSUE1UUFR4SmNuZ2R2M0RBbjc5ckllNXhxOG1wcGxTMzAwczVTdmJ1bTc=
+
+  STRIPE_SECRET_KEY: c2tfdGVzdF81MUt2Wk9CU0hWeHhHcEZLbUt5U3RoMEVHYWhiMVRWVk1mRFlnOXM3SGsxZFYydXZzM0lxVUlpdUpIMFdidzk4MTI5YjgwUmZoaXZDQTdHU3p2TFlWSUhReDAwQkpsYjJ2aWg=
+
