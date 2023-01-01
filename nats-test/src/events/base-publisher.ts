@@ -25,4 +25,7 @@ export abstract class Publisher<T extends Event> {
       });
     });
   }
+  get _client() {
+    return this.client;
+  }
 }

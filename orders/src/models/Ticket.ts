@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
-// import { OrderStatus } from "";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+
+export interface TicketDoc extends mongoose.Document {
+  title: string;
+  price: number;
+  userId: string;
+  version: number;
+}
 
 const TicketSchema = new mongoose.Schema(
   {
@@ -22,20 +29,15 @@ const TicketSchema = new mongoose.Schema(
     },
   }
 );
-// TicketSchema.methods.isReserved = async function (): Promise<Boolean> {
-//   const orderExists = await Order.findOne({
-//     ticket: this,
-//     status: {
-//       $in: [
-//         OrderStatus.Pending,
-//         OrderStatus.AwaitingPayment,
-//         OrderStatus.Complete,
-//       ],
-//     },
-//   });
-//   return !!orderExists;
-// };
+TicketSchema.set("versionKey", "version");
+TicketSchema.plugin(updateIfCurrentPlugin);
+// TicketSchema.pre("save", function () {
+//   // @ts-ignore
+//   this.$where = {
+//     version: this.get("version") - 1,
+//   };
+// });
 
-const Ticket = mongoose.model("Tickets", TicketSchema);
+const Ticket = mongoose.model<TicketDoc>("Tickets", TicketSchema);
 
 export default Ticket;

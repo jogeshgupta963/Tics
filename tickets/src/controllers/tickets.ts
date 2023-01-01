@@ -21,6 +21,7 @@ async function createTicket(req: Request, res: Response) {
     title: ticket.title,
     price: ticket.price,
     userId: ticket.userId,
+    version: ticket.version,
   });
 
   res.status(201).json(ticket);
@@ -59,6 +60,7 @@ async function updateTicket(req: Request, res: Response) {
     title: ticket.title,
     price: ticket.price,
     userId: ticket.userId,
+    version: ticket.version,
   });
 
   res.json(ticket);

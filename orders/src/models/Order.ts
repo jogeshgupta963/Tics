@@ -1,12 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { OrderStatus } from "@jogeshgupta-microservices/common";
-// export enum OrderStatus {
-//   Pending = "pending",
-//   Cancelled = "cancelled",
-//   Complete = "complete",
-//   AwaitingPayment = "awaiting:payment",
-// }
-
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { TicketDoc } from "./Ticket";
+interface OrderDoc extends mongoose.Document {
+  status: string;
+  expiresAt: Date;
+  userId: string;
+  ticket: TicketDoc;
+  version: number;
+}
 const OrderSchema = new mongoose.Schema(
   {
     userId: {
@@ -36,5 +38,8 @@ const OrderSchema = new mongoose.Schema(
   }
 );
 
-const Order = mongoose.model("Orders", OrderSchema);
+OrderSchema.set("versionKey", "version");
+OrderSchema.plugin(updateIfCurrentPlugin);
+
+const Order = mongoose.model<OrderDoc>("Orders", OrderSchema);
 export { Order, OrderStatus };

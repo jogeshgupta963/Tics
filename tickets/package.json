@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@jogeshgupta-microservices/common": "^1.0.3",
+    "@jogeshgupta-microservices/common": "^1.0.13",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-session": "^2.0.44",
     "@types/express": "^4.17.14",

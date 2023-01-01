@@ -64,6 +64,7 @@ async function createOrder(req: Request, res: Response) {
     userId: order.userId,
     orderStatus: order?.status,
     expiresAt: order.expiresAt!.toISOString(),
+    version: order.version,
     ticket: {
       id: ticket.id,
       price: ticket.price,
@@ -108,8 +109,9 @@ async function cancelOrder(req: Request, res: Response) {
 
   orderCancelEvent.publish({
     orderId: order.id,
+    version: order.version,
     ticket: {
-      id: order.ticket!.id.toString(),
+      id: order.ticket.id,
     },
   });
 

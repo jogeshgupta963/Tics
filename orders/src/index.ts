@@ -12,8 +12,8 @@ import {
 import methodOverride from "method-override";
 import { natsWrapper } from "./nats/connection/natsWrapper";
 import { OrderRouter } from "./routes/order";
-import { TicketCreatedListener } from "./nats/events/listeners/ticket-created";
-import { TicketUpdatedListener } from "./nats/events/listeners/ticket-updated";
+import { TicketCreatedListener } from "./nats/events/listeners/ticket/ticket-created";
+import { TicketUpdatedListener } from "./nats/events/listeners/ticket/ticket-updated";
 const app = express();
 
 app.set("trust proxy", true);
@@ -48,7 +48,6 @@ app.all("*", () => {
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error("nats client id must be defined");
   }
-  console.log(process.env.NATS_URL);
   try {
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,

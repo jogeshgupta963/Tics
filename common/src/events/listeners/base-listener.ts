@@ -41,6 +41,13 @@ export abstract class Listener<T extends Event> {
     });
   }
 
+  get _client() {
+    // if (!this._client) {
+    //   throw new Error("Cannot access Nats client before connecting");
+    // }
+    return this.client;
+  }
+
   parseMessage(msg: Message) {
     const data = msg.getData();
     return typeof data === "string"
