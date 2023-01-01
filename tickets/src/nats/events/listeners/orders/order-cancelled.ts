@@ -32,7 +32,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     }
     ticket.set({ orderId: undefined });
 
-    const ticketUpdated = new TicketUpdatedPublisher(this._client);
+    const ticketUpdated = new TicketUpdatedPublisher(this.client);
 
     ticketUpdated.publish({
       id: ticket.id,

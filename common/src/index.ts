@@ -31,6 +31,10 @@ export * from "./events/tickets/ticket-updated-event";
 
 export * from "./utils/types/order-status";
 export * from "./events/orders/order-cancelled-event";
-import { OrderCreatedEvent } from "./events/orders/order-created-event";
-// export * from "./events/orders/order-created-event";
-export { OrderCreatedEvent };
+// import { OrderCreatedEvent } from "./events/orders/order-created-event";
+export * from "./events/orders/order-created-event";
+// export { OrderCreatedEvent };
+
+//expiration
+
+export * from "./events/expirations/expiration-complete";
