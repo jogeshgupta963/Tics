@@ -48,4 +48,12 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: jogeshgupta963/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     
